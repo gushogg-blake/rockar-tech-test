@@ -24,24 +24,36 @@ const schema = buildSchema(`
 	}
 	
 	type Query {
-		getCustomer(identifier: String!, identifierField: String!): Customer
-		getProduct(identifier: String!, identifierField: String!): Product
+		getCustomer(identifier: String!, identifierField: String!): [Customer]
+		getProduct(identifier: String!, identifierField: String!): [Product]
 	}
 `);
 
 const rootValue = {
 	async getCustomer(args) {
-		console.log(args);
+		const fields = ["email", "forename", "surname", "contact_number", "postcode"];
+		const {identifier, identifierField} = args;
 		
-		return {
-			forename: "test",
-		};
+		if (!fields.includes(identifierField)) {
+			throw new Error("Field not supported for customer: " + identifierField);
+		}
+		
+		return await db.all("select * from customer where `" + identifierField + "` = $identifier", {
+			$identifier: identifier,
+		});
 	},
 	
 	async getProduct(args) {
-		console.log(args);
+		const fields = ["vin", "colour", "make", "model", "price"];
+		const {identifier, identifierField} = args;
 		
-		return null;
+		if (!fields.includes(identifierField)) {
+			throw new Error("Field not supported for customer: " + identifierField);
+		}
+		
+		return await db.all("select * from product where `" + identifierField + "` = $identifier", {
+			$identifier: identifier,
+		});
 	},
 };
 
