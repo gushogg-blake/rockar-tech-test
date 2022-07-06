@@ -5,6 +5,10 @@ const config = require("../config");
 const schema = require("./schema");
 const resolvers = require("./resolvers");
 
+/*
+start express server and expose GraphQL via GraphiQL UI.
+*/
+
 (async function() {
 	const db = new sqlite.PromisedDatabase();
 	

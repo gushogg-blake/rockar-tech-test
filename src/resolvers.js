@@ -1,4 +1,14 @@
+/*
+* create a GraphQL resolver for a database table
+* @param db sqlite3 database instance
+* @param table {string} table name
+* @param allowedFields {string[]} list of allowed fields to query on
+*/
 function createResolver(db, table, allowedFields) {
+	/*
+	* resolver
+	* @param {Object} args GraphQL query args
+	*/
 	return async function(args) {
 		const {identifier, identifierField} = args;
 		
